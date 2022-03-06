@@ -1,11 +1,10 @@
-import * as crypto from "crypto";
-import { connect, disconnect } from "mongoose";
+import { connect } from "mongoose";
 import { formatErrorResponse, formatJSONResponse } from "@libs/api-gateway";
 import { middyfy } from "@libs/lambda";
 import IdentityModel, { MONGODB_URL } from "../../db/model";
 import { APIGatewayProxyEvent } from "aws-lambda";
 
-const login = async (event: APIGatewayProxyEvent) => {
+const verify = async (event: APIGatewayProxyEvent) => {
   try {
     const code = event.pathParameters.code;
     const token = event.pathParameters.token;
@@ -40,7 +39,7 @@ const login = async (event: APIGatewayProxyEvent) => {
     });
 
     return formatJSONResponse({
-      message: `successfully sign in to an account`,
+      message: `successfully verified an email`,
       identity: updatedIdentity,
     });
   } catch (error) {
@@ -55,4 +54,4 @@ const login = async (event: APIGatewayProxyEvent) => {
   }
 };
 
-export const main = middyfy(login);
+export const main = middyfy(verify);

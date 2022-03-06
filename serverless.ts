@@ -4,6 +4,8 @@ import hello from "@functions/hello";
 import register from "@functions/register";
 import login from "@functions/login";
 import verifyEmail from "@functions/verifyEmail";
+import changePassword from "@functions/changePassword";
+import forgotPassword from "@functions/forgotPassword";
 
 const serverlessConfiguration: AWS = {
   service: "ct-identity-service",
@@ -22,7 +24,14 @@ const serverlessConfiguration: AWS = {
     },
   },
   // import the function via paths
-  functions: { hello, register, login, verifyEmail },
+  functions: {
+    hello,
+    register,
+    login,
+    verifyEmail,
+    changePassword,
+    forgotPassword,
+  },
   package: { individually: true },
   custom: {
     esbuild: {
