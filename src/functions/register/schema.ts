@@ -4,6 +4,7 @@ export default {
     email: { type: "string" },
     phone: { type: "string" },
     password: { type: "string" },
+    authToken: { type: "string" },
     authCode: { type: "number" },
     verifyExpiry: { type: "string" },
   },

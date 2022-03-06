@@ -22,7 +22,7 @@ const login: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
 
     if (identity.password) {
       const hmac = crypto
-        .createHmac("sha512", event.body.password)
+        .createHmac("sha256", event.body.password)
         .digest("hex")
         .toString();
       if (identity && identity.password === hmac) {

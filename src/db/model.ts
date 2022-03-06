@@ -10,6 +10,7 @@ export interface Identity {
   phone?: string;
   phoneVerified: boolean;
   password: string;
+  authToken: string;
   authCode: number;
   verifyExpiry: string;
 }
@@ -21,6 +22,7 @@ const IdentitySchema = new Schema<Identity>({
   phone: { type: "String", unique: true },
   phoneVerified: { type: "Boolean", default: false },
   password: String,
+  authToken: String,
   authCode: Number,
   verifyExpiry: String,
 });

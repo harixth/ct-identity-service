@@ -5,8 +5,8 @@ import {
 } from "@libs/api-gateway";
 import { formatJSONResponse } from "@libs/api-gateway";
 import { middyfy } from "@libs/lambda";
-import IdentityModel, { MONGODB_URL } from "../../db/model";
 import schema from "./schema";
+import IdentityModel, { MONGODB_URL } from "../../db/model";
 
 const register: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
   event
@@ -14,12 +14,17 @@ const register: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
   try {
     await connect(MONGODB_URL);
 
-    const { email, phone, password, authCode, verifyExpiry } = event.body;
+    const { email, phone, password, authToken, authCode, verifyExpiry } =
+      event.body;
+
+    // TODO: Find better way to prevent null phone number colliding in unique field
+    const count = await IdentityModel.count();
 
     const newIdentity = new IdentityModel({
       email,
-      phone,
+      phone: phone ?? count.toString(),
       password,
+      authToken,
       authCode,
       verifyExpiry,
     });
@@ -31,7 +36,8 @@ const register: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
       identity,
     });
   } catch (error) {
-    let message = `Something when wrong`;
+    let message =
+      error.message ?? `Something when wrong during account creation`;
     if (error.code === 11000) {
       message = "Your email or phone already associated to an account";
     }

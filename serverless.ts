@@ -3,6 +3,7 @@ import type { AWS } from "@serverless/typescript";
 import hello from "@functions/hello";
 import register from "@functions/register";
 import login from "@functions/login";
+import verifyEmail from "@functions/verifyEmail";
 
 const serverlessConfiguration: AWS = {
   service: "ct-identity-service",
@@ -21,7 +22,7 @@ const serverlessConfiguration: AWS = {
     },
   },
   // import the function via paths
-  functions: { hello, register, login },
+  functions: { hello, register, login, verifyEmail },
   package: { individually: true },
   custom: {
     esbuild: {
