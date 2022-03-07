@@ -6,7 +6,7 @@ export default {
     {
       http: {
         method: "get",
-        path: "forgot-password/{id}",
+        path: "forgot-password/{username}",
       },
     },
   ],

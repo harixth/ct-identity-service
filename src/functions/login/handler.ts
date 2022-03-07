@@ -9,6 +9,7 @@ import { formatJSONResponse } from "@libs/api-gateway";
 import { middyfy } from "@libs/lambda";
 import IdentityModel, { MONGODB_URL } from "../../db/model";
 import schema from "./schema";
+import { isValidEmailAddress } from "./utils";
 
 const login: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
   event
@@ -16,27 +17,33 @@ const login: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
   try {
     await connect(MONGODB_URL);
 
-    const identity = event.body.phone
-      ? await IdentityModel.findOne({ phone: event.body.phone })
-      : await IdentityModel.findOne({ email: event.body.email });
+    const identity = isValidEmailAddress(event.body.username)
+      ? await IdentityModel.findOne({ email: event.body.username })
+      : await IdentityModel.findOne({ phone: event.body.username });
+
+    if (!identity) {
+      throw new Error("Account not found");
+    }
 
     if (identity.password) {
       const hmac = crypto
         .createHmac("sha256", event.body.password)
         .digest("hex")
         .toString();
-      if (identity && identity.password === hmac) {
+      if (identity.password === hmac) {
         return formatJSONResponse({
           message: `successfully sign in to an account`,
           identity,
         });
+      } else {
+        throw new Error("Password is invalid");
       }
     }
-    throw new Error("identity not found");
   } catch (error) {
+    let message = error.message ?? `Something when wrong during sign in`;
     return formatErrorResponse(
       {
-        message: `Something when wrong`,
+        message,
         error,
       },
       500

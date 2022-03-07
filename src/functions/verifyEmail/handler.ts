@@ -14,7 +14,7 @@ const verify = async (event: APIGatewayProxyEvent) => {
     const identity = await IdentityModel.findOne({ authToken: token });
 
     if (!identity) {
-      throw new Error("Identity not found");
+      throw new Error("Account not found");
     }
 
     if (identity.emailVerified) {

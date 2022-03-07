@@ -4,14 +4,17 @@ import { formatErrorResponse, formatJSONResponse } from "@libs/api-gateway";
 import { middyfy } from "@libs/lambda";
 import IdentityModel, { MONGODB_URL } from "../../db/model";
 import { APIGatewayProxyEvent } from "aws-lambda";
+import { isValidEmailAddress } from "@functions/login/utils";
 
 const change = async (event: APIGatewayProxyEvent) => {
   try {
-    const id = event.pathParameters.id;
+    const username = decodeURI(event.pathParameters.username);
 
     await connect(MONGODB_URL);
 
-    const identity = await IdentityModel.findById(id);
+    const identity = isValidEmailAddress(username)
+      ? await IdentityModel.findOne({ email: username })
+      : await IdentityModel.findOne({ phone: username });
 
     if (!identity) {
       throw new Error("Identity not found");
