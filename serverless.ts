@@ -6,6 +6,7 @@ import login from "@functions/login";
 import verifyEmail from "@functions/verifyEmail";
 import changePassword from "@functions/changePassword";
 import forgotPassword from "@functions/forgotPassword";
+import identity from "@functions/identity";
 
 const serverlessConfiguration: AWS = {
   service: "ct-identity-service",
@@ -31,6 +32,7 @@ const serverlessConfiguration: AWS = {
     verifyEmail,
     changePassword,
     forgotPassword,
+    identity,
   },
   package: { individually: true },
   custom: {

@@ -8,37 +8,19 @@ import { isValidEmailAddress } from "@functions/login/utils";
 
 const change = async (event: APIGatewayProxyEvent) => {
   try {
-    const username = decodeURI(event.pathParameters.username);
+    const id = event.pathParameters.id;
 
     await connect(MONGODB_URL);
 
-    const identity = isValidEmailAddress(username)
-      ? await IdentityModel.findOne({ email: username })
-      : await IdentityModel.findOne({ phone: username });
+    const identity = await IdentityModel.findById(id);
 
     if (!identity) {
       throw new Error("Identity not found");
     }
 
-    const currentTime = Math.round(new Date().getTime() / 1000);
-    const verifyExpiry = currentTime + 24 * 3600;
-
-    const hmac = crypto
-      .createHmac("sha256", identity.email + currentTime.toString())
-      .digest("hex");
-
-    const updatedIdentity = await IdentityModel.findByIdAndUpdate(
-      identity.id,
-      {
-        authToken: hmac,
-        verifyExpiry,
-      },
-      { new: true }
-    );
-
     return formatJSONResponse({
-      message: `successfully generate new token for password reset`,
-      identity: updatedIdentity,
+      message: `successfully find an identity`,
+      identity,
     });
   } catch (error) {
     return formatErrorResponse(
