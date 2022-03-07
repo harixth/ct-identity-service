@@ -24,13 +24,13 @@ const change: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
       throw new Error("Identity not found");
     }
 
+    const currentTime = Math.round(new Date().getTime() / 1000);
+
     if (event.body.oldPassword) {
       if (identity.password !== event.body.oldPassword) {
         throw new Error("Old Password is invalid");
       }
     } else {
-      const currentTime = Math.round(new Date().getTime() / 1000);
-
       if (currentTime > Number(identity.verifyExpiry)) {
         throw new Error(
           "Verification link has expired, Please request a new one"
@@ -38,9 +38,14 @@ const change: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
       }
     }
 
-    const updatedIdentity = await IdentityModel.findByIdAndUpdate(identity.id, {
-      password: event.body.password,
-    });
+    const updatedIdentity = await IdentityModel.findByIdAndUpdate(
+      identity.id,
+      {
+        password: event.body.password,
+        verifyExpiry: currentTime,
+      },
+      { new: true }
+    );
 
     return formatJSONResponse({
       message: `successfully changed password`,

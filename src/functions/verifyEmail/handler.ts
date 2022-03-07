@@ -33,10 +33,14 @@ const verify = async (event: APIGatewayProxyEvent) => {
       throw new Error("Code entered is invalid");
     }
 
-    const updatedIdentity = await IdentityModel.findByIdAndUpdate(identity.id, {
-      emailVerified: true,
-      verifyExpiry: currentTime,
-    });
+    const updatedIdentity = await IdentityModel.findByIdAndUpdate(
+      identity.id,
+      {
+        emailVerified: true,
+        verifyExpiry: currentTime,
+      },
+      { new: true }
+    );
 
     return formatJSONResponse({
       message: `successfully verified an email`,

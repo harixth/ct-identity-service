@@ -27,10 +27,16 @@ const change = async (event: APIGatewayProxyEvent) => {
       .createHmac("sha256", identity.email + currentTime.toString())
       .digest("hex");
 
-    const updatedIdentity = await IdentityModel.findByIdAndUpdate(identity.id, {
-      authToken: hmac,
-      verifyExpiry,
-    });
+    const updatedIdentity = await IdentityModel.findByIdAndUpdate(
+      identity.id,
+      {
+        authToken: hmac,
+        verifyExpiry,
+      },
+      { new: true }
+    );
+
+    console.log(updatedIdentity);
 
     return formatJSONResponse({
       message: `successfully generate new token for password reset`,
