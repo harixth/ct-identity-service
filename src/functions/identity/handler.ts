@@ -1,12 +1,10 @@
-import * as crypto from "crypto";
 import { connect } from "mongoose";
 import { formatErrorResponse, formatJSONResponse } from "@libs/api-gateway";
 import { middyfy } from "@libs/lambda";
 import IdentityModel, { MONGODB_URL } from "../../db/model";
 import { APIGatewayProxyEvent } from "aws-lambda";
-import { isValidEmailAddress } from "@functions/login/utils";
 
-const change = async (event: APIGatewayProxyEvent) => {
+const find = async (event: APIGatewayProxyEvent) => {
   try {
     const id = event.pathParameters.id;
 
@@ -26,7 +24,7 @@ const change = async (event: APIGatewayProxyEvent) => {
     return formatErrorResponse(
       {
         message:
-          error.message ?? `Something when wrong during password reset request`,
+          error.message ?? `Something when wrong during finding identity`,
         error,
       },
       500
@@ -34,4 +32,4 @@ const change = async (event: APIGatewayProxyEvent) => {
   }
 };
 
-export const main = middyfy(change);
+export const main = middyfy(find);

@@ -22,7 +22,7 @@ export const formatJSONResponse = (response: Record<string, unknown>) => {
 
 export const formatErrorResponse = (
   response: Record<string, unknown>,
-  statusCode
+  statusCode: number
 ) => {
   return {
     statusCode: statusCode,
