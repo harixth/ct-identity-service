@@ -1,0 +1,1 @@
+serverless deploy --stage production --region ap-southeast-1

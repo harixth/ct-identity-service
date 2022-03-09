@@ -1,0 +1,6 @@
+{
+    "headers": {
+        "Content-Type": "application/json"
+    },
+    "body": "{ \"email\": \"user@cryptotracker.my\", \"phone\": \"+60123456789\", \"password\": \"password\", \"authToken\": \"authToken\", \"authCode\": \"1234\", \"verifyExpiry\": \"123456789\"}"
+}
