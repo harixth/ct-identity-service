@@ -17,7 +17,7 @@ $ npm install
 
 ## Running the app
 
-Project will be running at http://localhost:5010. Make call to `/dev` path to acccess the serverless endpoints
+Project will be running at http://localhost:5000. Make call to `/dev` path to acccess the serverless endpoints
 
 ```bash
 # development
