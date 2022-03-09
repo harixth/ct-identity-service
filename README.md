@@ -2,6 +2,8 @@
 
 This project has been generated using the `aws-nodejs-typescript` template from the [Serverless framework](https://www.serverless.com/). It responsible for serving the REST endpoints to handle authentication for the system as well as managing indentity
 
+Project is live at: https://1qehdty5i5.execute-api.ap-southeast-1.amazonaws.com/production/hello
+
 ## Configuration
 
 > **Requirements**:
